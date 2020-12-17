@@ -7,22 +7,20 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import utils.SessionFactorySingleton;
 
-import java.util.List;
 
 public class PointDao implements Dao<PointEntity> {
 
+    private Session session;
+    private SessionFactory sessionFactory;
+    private Transaction transaction;
+
     @Override
     public void save(PointEntity pointEntity) {
-        Session session = null;
-        SessionFactory sessionFactory = null;
-        Transaction transaction = null;
         try {
             sessionFactory = SessionFactorySingleton.getSessionFactory();
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-
             session.save(pointEntity);
-            System.out.println("Inserted Successfully");
             session.getTransaction().commit();
         } catch (RuntimeException runtimeException) {
             transaction.rollback();
@@ -32,10 +30,5 @@ public class PointDao implements Dao<PointEntity> {
                 sessionFactory.close();
             }
         }
-    }
-
-    @Override
-    public List<PointEntity> getAll() {
-        return null;
     }
 }
